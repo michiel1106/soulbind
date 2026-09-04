@@ -10,6 +10,7 @@ import net.fabricmc.fabric.api.command.v2.*;
 import net.fabricmc.loader.api.*;
 import net.minecraft.commands.*;
 import net.minecraft.commands.arguments.*;
+import net.minecraft.network.chat.*;
 import net.minecraft.server.level.*;
 
 import java.util.*;
@@ -20,9 +21,8 @@ public class DebugCommands {
         if (!FabricLoader.getInstance().isDevelopmentEnvironment()) return;
 
         CommandRegistrationCallback.EVENT.register(((dispatcher, commandBuildContext, commandSelection) -> {
-            LiteralArgumentBuilder<CommandSourceStack> base = Commands.literal("soulbound").then(Commands.literal("debug"));
 
-            dispatcher.register(base.then(Commands.literal("component")
+            dispatcher.register(Commands.literal("soulbound").then(Commands.literal("debug").then(Commands.literal("component")
                     .then(Commands.literal("add").then(Commands.argument("player", EntityArgument.player())
                             .then(Commands.literal("buffs").then(Commands.argument("id", StringArgumentType.string()).executes((commandContext -> addToList(commandContext, "buffs", "id")))))
                             .then(Commands.literal("debuffs").then(Commands.argument("id", StringArgumentType.string()).executes((commandContext -> addToList(commandContext, "debuffs", "id")))))
@@ -36,7 +36,26 @@ public class DebugCommands {
                     .then(Commands.literal("set").then(Commands.argument("player", EntityArgument.player())
                             .then(Commands.literal("uuid").then(Commands.argument("uuid", UuidArgument.uuid()).executes((DebugCommands::setUUID))))))
 
-            ));
+
+                    .then(Commands.literal("get").then(Commands.argument("player", EntityArgument.player()).executes(ctx -> {
+                        ServerPlayer player = EntityArgument.getPlayer(ctx, "player");
+                        ISoulDataComponent.SoulData value = ModComponents.SOULDATA.get(player).getValue();
+
+                        StringBuilder buffstr = new StringBuilder();
+                        StringBuilder debuffstr = new StringBuilder();
+
+                        value.buffs.forEach((soulData) -> {buffstr.append(soulData).append("\n");});
+                        value.debuffs.forEach((soulData) -> {debuffstr.append(soulData).append("\n");});
+
+                        ctx.getSource().sendSystemMessage(Component.literal("Buffs: " + buffstr));
+                        ctx.getSource().sendSystemMessage(Component.literal("Debuffs: " + debuffstr));
+                        ctx.getSource().sendSystemMessage(Component.literal("uuid: " + value.uuid));
+                        ctx.getSource().sendSystemMessage(Component.literal("----------------------------------------------------"));
+
+
+                        return 0;
+                    })))
+            )));
 
         }));
 
@@ -55,11 +74,10 @@ public class DebugCommands {
         ServerPlayer player = EntityArgument.getPlayer(context, "player");
         ISoulDataComponent.SoulData value = ModComponents.SOULDATA.get(player).getValue();
 
-        switch (listId) {
-            case  "buffs":
-                value.buffs.add(string);
-            case "debuffs" :
-                value.debuffs.add(string);
+        if (listId.equals("buffs")) {
+            value.buffs.add(string);
+        } else if (listId.equals("debuffs")) {
+            value.debuffs.add(string);
         }
 
         return 0;
@@ -70,11 +88,10 @@ public class DebugCommands {
         ServerPlayer player = EntityArgument.getPlayer(context, "player");
         ISoulDataComponent.SoulData value = ModComponents.SOULDATA.get(player).getValue();
 
-        switch (listId) {
-            case  "buffs":
-                value.buffs.remove(string);
-            case "debuffs" :
-                value.debuffs.remove(string);
+        if (listId.equals("buffs")) {
+            value.buffs.remove(string);
+        } else if (listId.equals("debuffs")) {
+            value.debuffs.remove(string);
         }
 
         return 0;
