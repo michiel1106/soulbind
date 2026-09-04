@@ -22,6 +22,11 @@
 			"bikerdbmid.soulbound.client.SoulBoundClient"
 		]
 	},
+	"custom": {
+		"cardinal-components": [
+			"soulbound:souldata"
+		]
+	},
 	"mixins": [
 		"soulbound.mixins.json",
 		{
