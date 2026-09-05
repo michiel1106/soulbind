@@ -10,30 +10,30 @@ public interface ISoulDataComponent extends Component {
 
 
     public class SoulData {
-        public static final SoulData EMPTY = new SoulData(null, List.of(), List.of());
+        public static final SoulData EMPTY = new SoulData(null, "", "");
 
 
 
         @Nullable public UUID uuid;
-        public List<String> buffs;
-        public List<String> debuffs;
+        public String effect;
+        public String ability;
 
-        public SoulData(@Nullable UUID uuid, List<String> buffs, List<String> debuffs) {
+        public SoulData(@Nullable UUID uuid, String effect, String ability) {
             this.uuid = uuid;
-            this.buffs = buffs;
-            this.debuffs = debuffs;
+            this.effect = effect;
+            this.ability = ability;
         }
 
         public void setUuid(@Nullable UUID uuid) {
             this.uuid = uuid;
         }
 
-        public void setBuffs(List<String> buffs) {
-            this.buffs = new ArrayList<>(buffs);
+        public void setEffect(String effect) {
+            this.effect = effect;
         }
 
-        public void setDebuffs(List<String> debuffs) {
-            this.debuffs = new ArrayList<>(debuffs);
+        public void setAbility(String ability) {
+            this.ability = ability;
         }
     }
 }

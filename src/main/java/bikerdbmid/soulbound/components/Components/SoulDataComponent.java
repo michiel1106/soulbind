@@ -11,7 +11,7 @@ import org.ladysnake.cca.api.v3.component.tick.*;
 import java.util.*;
 
 public class SoulDataComponent implements ISoulDataComponent, AutoSyncedComponent, CommonTickingComponent {
-    private SoulData soulData = new SoulData(null, new ArrayList<>(), new ArrayList<>());
+    private SoulData soulData = new SoulData(null, "", "");
     private final Player player;
 
 
@@ -26,22 +26,23 @@ public class SoulDataComponent implements ISoulDataComponent, AutoSyncedComponen
 
     @Override
     public void readData(ValueInput valueInput) {
-        Optional<List<String>> buffs = valueInput.read("buffs", Codec.list(Codec.STRING));
-        Optional<List<String>> debuffs = valueInput.read("debuffs", Codec.list(Codec.STRING));
         Optional<UUID> uuid = valueInput.read("uuid", UUIDUtil.CODEC);
+        Optional<String> ability = valueInput.read("ability", Codec.STRING);
+        Optional<String> effect = valueInput.read("effect", Codec.STRING);
 
-        buffs.ifPresent(soulData::setBuffs);
-        debuffs.ifPresent(soulData::setDebuffs);
         uuid.ifPresent(soulData::setUuid);
+        ability.ifPresent(soulData::setAbility);
+        effect.ifPresent(soulData::setEffect);
+
     }
 
     @Override
     public void writeData(ValueOutput valueOutput) {
-        valueOutput.store("buffs", Codec.list(Codec.STRING), soulData.buffs);
-        valueOutput.store("debuffs", Codec.list(Codec.STRING), soulData.debuffs);
         if (soulData.uuid != null) {
             valueOutput.store("uuid", UUIDUtil.CODEC, soulData.uuid);
         }
+        valueOutput.store("ability", Codec.STRING, soulData.ability);
+        valueOutput.store("effect", Codec.STRING, soulData.effect);
     }
 
     @Override
