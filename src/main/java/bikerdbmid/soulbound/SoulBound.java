@@ -1,7 +1,10 @@
 package bikerdbmid.soulbound;
 
+import bikerdbmid.soulbound.commands.*;
+import bikerdbmid.soulbound.commands.debug.*;
 import bikerdbmid.soulbound.components.*;
-import bikerdbmid.soulbound.debug.*;
+import bikerdbmid.soulbound.components.content.*;
+import bikerdbmid.soulbound.networking.*;
 import net.fabricmc.api.ModInitializer;
 
 import net.minecraft.resources.Identifier;
@@ -20,7 +23,10 @@ public class SoulBound implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		ModComponents.init();
+		ModNetworking.init();
+		ModCommands.init();
 		DebugCommands.init();
+		ModContentInit.init();
 	}
 
 	public static Identifier id(String path) {

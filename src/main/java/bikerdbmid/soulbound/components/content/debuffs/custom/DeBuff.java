@@ -1,14 +1,14 @@
-package bikerdbmid.soulbound.components.content.buffs.custom;
+package bikerdbmid.soulbound.components.content.debuffs.custom;
 
 import bikerdbmid.soulbound.api.content.*;
 import net.minecraft.nbt.*;
 import net.minecraft.world.entity.player.*;
 
-public abstract class Buff {
+public abstract class DeBuff {
     public final String id;
     public final EDistType distType;
 
-    protected Buff(EDistType distType, String id) {
+    protected DeBuff(EDistType distType, String id) {
         this.distType = distType;
         this.id = id;
     }
