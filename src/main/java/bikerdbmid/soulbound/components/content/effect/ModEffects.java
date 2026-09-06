@@ -17,8 +17,9 @@ public class ModEffects {
     public static Effect FROZEN_CURSE = register(
             new Effect("frozen_curse")
                     .withBuff(ModBuffs.JUMPING_JACK)
-                    .withDebuff(ModDebuffs.SLOWNESS)
-                    .withPower(ModPowers.ICE_ARMOR)
+                    .withDebuff(ModDebuffs.LEVEL_1)
+                    .withDebuff(ModDebuffs.LEVEL_2)
+                    .withDebuff(ModDebuffs.LEVEL_3)
     );
 
     public static void init() {}

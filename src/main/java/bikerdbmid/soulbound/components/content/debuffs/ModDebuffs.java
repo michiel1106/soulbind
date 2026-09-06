@@ -11,6 +11,9 @@ public class ModDebuffs {
     private static final Map<String, DeBuff> debuffMap = new HashMap<>();
 
     public static DeBuff SLOWNESS = register(new EffectDebuff(EDistType.HIGH, "slowness", MobEffects.SLOWNESS, 20, 1));
+    public static DeBuff LEVEL_1 = register(new MessageDebuff(EDistType.LOW, "level_1", "Level 1 is active now"));
+    public static DeBuff LEVEL_2 = register(new MessageDebuff(EDistType.MEDIUM, "level_2", "Level 2 is active now"));
+    public static DeBuff LEVEL_3 = register(new MessageDebuff(EDistType.HIGH, "level_3", "Level 3 is active now"));
 
 
 
