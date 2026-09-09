@@ -1,28 +1,38 @@
 package bikerdbmid.soulbound.client.screen.widget;
 
-import bikerdbmid.soulbound.*;
-import bikerdbmid.soulbound.client.*;
+import bikerdbmid.soulbound.components.content.buffs.custom.*;
+import bikerdbmid.soulbound.components.content.debuffs.custom.*;
+import bikerdbmid.soulbound.components.content.effect.*;
+import bikerdbmid.soulbound.components.content.effect.custom.*;
+import net.minecraft.client.*;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.gui.components.*;
 import net.minecraft.client.gui.narration.*;
 import net.minecraft.client.input.*;
 import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.texture.*;
 import net.minecraft.network.chat.*;
 import net.minecraft.resources.*;
 import net.minecraft.util.*;
-import net.minecraft.world.effect.*;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.item.*;
+import net.minecraft.world.level.block.*;
+import org.jetbrains.annotations.*;
 
 import java.util.*;
 
 public class RollingEffectWidget extends AbstractWidget {
     private static Random random = new Random();
 
+
+    private final int itemSize;
+    private final int itemGap;
+    private final int itemHeight;
+
     private static final int ITEM_SIZE = 100;
     private static final int ITEM_GAP = 10;
     private static final int ITEM_HEIGHT = ITEM_SIZE + ITEM_GAP; // 110
 
-    List<Identifier> textures = new ArrayList<>();
+    List<Effect> effects = new ArrayList<>();
 
     // --- spin state ---
     private enum State { IDLE, SPINNING, STOPPING, STOPPED }
@@ -36,24 +46,26 @@ public class RollingEffectWidget extends AbstractWidget {
     private double stopTargetPos;
     private long stopDurationMs;
 
+    private int tempInt = 0;
+
     private int resultIndex = -1; // the index we must land on
 
     public boolean selected = false;
 
     public RollingEffectWidget(int x, int y, int width, int height) {
         super(x, y, width, height, Component.empty());
-        textures.add(Hud.getMobEffectSprite(MobEffects.NAUSEA));
-        textures.add(Hud.getMobEffectSprite(MobEffects.POISON));
-        textures.add(Hud.getMobEffectSprite(MobEffects.JUMP_BOOST));
-        textures.add(Hud.getMobEffectSprite(MobEffects.ABSORPTION));
-        textures.add(Hud.getMobEffectSprite(MobEffects.BAD_OMEN));
-        textures.add(Hud.getMobEffectSprite(MobEffects.HEALTH_BOOST));
-        textures.add(Hud.getMobEffectSprite(MobEffects.WATER_BREATHING));
-        textures.add(Hud.getMobEffectSprite(MobEffects.GLOWING));
-        textures.add(Hud.getMobEffectSprite(MobEffects.HERO_OF_THE_VILLAGE));
-        textures.add(Hud.getMobEffectSprite(MobEffects.INFESTED));
-        textures.add(Hud.getMobEffectSprite(MobEffects.STRENGTH));
-        textures.add(Hud.getMobEffectSprite(MobEffects.LUCK));
+        effects.addAll(ModEffects.getAllEffectsExceptEmpty());
+
+        this.itemSize = Math.min(width, height / 3); // pick whatever ratio fits your layout
+        this.itemGap = Math.max(4, itemSize / 10);
+        this.itemHeight = itemSize + itemGap;
+
+       // Collections.shuffle(effects);
+
+    }
+
+    public int getListSize() {
+        return effects.size();
     }
 
     /** Call this to kick off a roll that will land on `resultIndex`. */
@@ -69,12 +81,10 @@ public class RollingEffectWidget extends AbstractWidget {
         long now = System.currentTimeMillis();
         updateAnimation(now);
 
-        graphics.enableScissor(getX(), getY(), getX() + width, getY() + height);
+
         graphics.fill(getX(), getY(), getX() + width, getY() + height, 0xBB000000);
 
-        if (isMouseOver(mouseX, mouseY) || selected) {
-            graphics.outline(getX(), getY(), width, height, 0xFFFFFFFF);
-        }
+
 
         int centerY = getY() + height / 2 - ITEM_SIZE / 2;
 
@@ -83,16 +93,107 @@ public class RollingEffectWidget extends AbstractWidget {
         int lastVisibleRow  = (int) Math.floor((scrollPos + height) / ITEM_HEIGHT) + 1;
 
         for (int row = firstVisibleRow; row <= lastVisibleRow; row++) {
-            int idx = Math.floorMod(row, textures.size());
-            Identifier identifier = textures.get(idx);
+            int idx = Math.floorMod(row, effects.size());
+            Effect effect = getEffect(idx);
+            Identifier identifier = effect.getImage();
 
             int y = centerY + (int) (row * ITEM_HEIGHT - scrollPos);
             int x = getX() + width / 2 - ITEM_SIZE / 2;
 
-            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, identifier, x, y, ITEM_SIZE, ITEM_SIZE, ARGB.white(1.0f));
+            switch (effect.getImgRenderType()) {
+                case BLOCK -> renderBlock(graphics, x, y, ITEM_SIZE, effect.getBlock());
+                case ITEM -> renderItem(graphics, x, y, ITEM_SIZE, effect.getItem());
+                case IMAGE -> renderImage(graphics, x, y, effect.getImage());
+            }
+
+            if (mouseX >= x && mouseY >= y && mouseX < x + ITEM_SIZE && mouseY < y + ITEM_SIZE) {
+                if (isMouseOver(mouseX, mouseY)) {
+                    renderTooltip(graphics, mouseX, mouseY, effect, a);
+                }
+            }
+
             graphics.outline(x, y, ITEM_SIZE, ITEM_SIZE, ARGB.color(0, 100, 125));
         }
+
+        if (isMouseOver(mouseX, mouseY) || selected) {
+            graphics.outline(getX(), getY(), width, height, 0xFFFFFFFF);
+        }
     }
+
+    private void renderImage(GuiGraphicsExtractor graphics, int x, int y, @Nullable Identifier identifier) {
+        if (identifier == null) return;
+
+        if (!identifier.getPath().endsWith(".png")) {
+            identifier = Identifier.fromNamespaceAndPath(identifier.getNamespace(), identifier.getPath() + ".png");
+        }
+
+        AbstractTexture texture = Minecraft.getInstance().getTextureManager().getTexture(identifier);
+        int srcWidth = texture.getTexture().getWidth(0);
+        int srcHeight = texture.getTexture().getHeight(0);
+
+        graphics.blit(
+                RenderPipelines.GUI_TEXTURED,
+                identifier,
+                x, y,
+                0f, 0f,
+                ITEM_SIZE, ITEM_SIZE,
+                srcWidth, srcHeight,
+                srcWidth, srcHeight
+        );
+
+
+    }
+
+    private void renderItem(GuiGraphicsExtractor graphics, int x, int y, int itemSize, @Nullable Item item) {
+        if (item == null) return;
+
+        float scale = itemSize / 16f;
+
+        graphics.pose().pushMatrix();
+        graphics.pose().translate(x, y);
+        graphics.pose().scale(scale, scale);
+        graphics.item(item.getDefaultInstance(), 0, 0);
+        graphics.pose().popMatrix();
+    }
+
+    private void renderBlock(GuiGraphicsExtractor graphics, int x, int y, int itemSize, @Nullable Block block) {
+        if (block == null) return;
+        graphics.item(block.asItem().getDefaultInstance(), x, y);
+    }
+
+    private void renderTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY, Effect effect, float a) {
+
+        List<Component> list = new ArrayList<>(List.of(
+                Component.translatable("soulbound.powers." + effect.id + ".title"),
+                Component.empty(),
+                Component.translatable("soulbound.powers." + effect.id + ".description1"),
+                Component.translatable("soulbound.powers." + effect.id + ".description2"),
+                Component.translatable("soulbound.powers." + effect.id + ".description3"),
+                Component.empty()
+        ));
+
+        list.add(Component.literal("Buffs:"));
+        for (Buff buff : effect.getBuffs()) {
+            list.add(Component.translatable("soulbound.buffs." + buff.id + ".title"));
+        }
+
+        list.add(Component.literal("Debuffs:"));
+        for (DeBuff debuff : effect.getDebuffs()) {
+            list.add(Component.translatable("soulbound.debuffs." + debuff.id + ".title"));
+        }
+
+        graphics.setTooltipForNextFrame(
+                Minecraft.getInstance().font,
+                list,
+                Optional.empty(),
+                mouseX,
+                mouseY);
+    }
+
+    private Effect getEffect(int idx) {
+        return effects.get(idx);
+    }
+
 
     @Override
     protected void updateWidgetNarration(NarrationElementOutput output) {
@@ -102,7 +203,7 @@ public class RollingEffectWidget extends AbstractWidget {
     @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
         if (doubleClick) {
-            spin(random.nextInt(textures.size()));
+            spin(random.nextInt(effects.size()));
         }
 
         return super.mouseClicked(event, doubleClick);
@@ -139,7 +240,7 @@ public class RollingEffectWidget extends AbstractWidget {
 
         // find the *next* scrollPos value (ahead of current) where resultIndex
         // lands centered, plus a few extra full loops so it visibly "spins down"
-        int listSize = textures.size();
+        int listSize = effects.size();
         double currentRow = scrollPos / ITEM_HEIGHT;
         int currentRowFloor = (int) Math.floor(currentRow);
 

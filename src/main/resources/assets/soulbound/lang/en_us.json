@@ -1,3 +1,160 @@
 {
+  "soulbound.powers.feather.title": "Feather",
 
+  "soulbound.powers.feather.description1": "You are as light as a feather! Taking no fall damage and dashing wherever you look!",
+  "soulbound.powers.feather.description2": "",
+  "soulbound.powers.feather.description3": "",
+
+  "soulbound.buffs.feather.swiftness": "Swiftness II",
+  "soulbound.buffs.feather.jump_boost": "Jump Boost II",
+
+  "soulbound.debuffs.feather.slow_falling": "Slow Falling III",
+  "soulbound.debuffs.feather.slowness": "Slowness I–III",
+
+  "soulbound.abilities.feather_dash.title": "Dash",
+  "soulbound.abilities.feather_dash.description": "Dash in the direction you are looking. Cooldown: 2 minutes.",
+
+
+  "soulbound.powers.poison.title": "Poison",
+
+  "soulbound.powers.poison.description1": "Your fists carry a toxic touch, giving you a chance to poison those you strike!",
+  "soulbound.powers.poison.description2": "",
+  "soulbound.powers.poison.description3": "",
+
+  "soulbound.buffs.poison.regeneration": "Regeneration I",
+  "soulbound.buffs.poison.absorption": "Absorption II",
+
+  "soulbound.debuffs.poison.poison": "Poison III",
+  "soulbound.debuffs.poison.regeneration_chance": "Chance to inflict Regeneration instead of Poison",
+
+  "soulbound.abilities.poison.title": "Toxic Touch",
+  "soulbound.abilities.poison.description": "Punch your target with an empty hand for a 30% chance to inflict Poison for 10 seconds.",
+
+
+  "soulbound.powers.frozen.title": "Frozen",
+
+  "soulbound.powers.frozen.description1": "You bring winter wherever you walk! Freeze your foes with your fists and turn water beneath you into ice.",
+  "soulbound.powers.frozen.description2": "",
+  "soulbound.powers.frozen.description3": "",
+
+  "soulbound.buffs.frozen.resistance": "Resistance",
+  "soulbound.buffs.frozen.night_vision": "Night Vision",
+
+  "soulbound.debuffs.frozen.slowness": "Slowness II–IV",
+  "soulbound.debuffs.frozen.freezing": "Freezing IV",
+
+  "soulbound.abilities.frozen.title": "Freeze",
+  "soulbound.abilities.frozen.description": "Punch an opponent with an empty hand for a 25% chance to freeze them in place for 5 seconds.",
+
+
+  "soulbound.powers.growth.title": "Growth",
+
+  "soulbound.powers.growth.description1": "Nature flourishes in your presence! Crops grow at your command, and harvesting them yields a greater bounty.",
+  "soulbound.powers.growth.description2": "",
+  "soulbound.powers.growth.description3": "",
+
+  "soulbound.buffs.growth.saturation": "Saturation",
+  "soulbound.buffs.growth.plentiful_crops": "Plentiful Crops",
+
+  "soulbound.debuffs.growth.tall": "Growth",
+  "soulbound.debuffs.growth.hunger": "Hunger I–II",
+
+  "soulbound.abilities.growth.title": "Rooted Shield",
+  "soulbound.abilities.growth.description": "Summon a spherical shield of mangrove roots around yourself.",
+
+
+  "soulbound.powers.fire.title": "Fire",
+
+  "soulbound.powers.fire.description1": "Lava is no obstacle to you! Walk across it by turning it into harmless magma and shrug off the flames with ease.",
+  "soulbound.powers.fire.description2": "",
+  "soulbound.powers.fire.description3": "",
+
+  "soulbound.buffs.fire.fire_resistance": "Fire Resistance",
+
+  "soulbound.debuffs.fire.wither": "Wither III",
+  "soulbound.debuffs.fire.blindness": "Blindness II–III",
+
+  "soulbound.abilities.fire.title": "Inferno",
+  "soulbound.abilities.fire.description": "Cook every cookable item in your inventory instantly. Cooldown: 10 minutes.",
+
+
+  "soulbound.powers.thunder.title": "Thunder",
+
+  "soulbound.powers.thunder.description1": "The storm answers to you! Smite your enemies while the skies around you are forever clear.",
+  "soulbound.powers.thunder.description2": "",
+  "soulbound.powers.thunder.description3": "",
+
+  "soulbound.buffs.thunder.clear_skies": "Clear Skies",
+  "soulbound.buffs.thunder.mob_fire": "Burning Mobs",
+
+  "soulbound.debuffs.thunder.rain": "Constant Rain",
+  "soulbound.debuffs.thunder.lightning": "Lightning Attraction",
+
+  "soulbound.abilities.thunder.title": "Stormsense",
+  "soulbound.abilities.thunder.description": "Reveal whether you have the required item in your inventory to unleash a smite.",
+
+
+  "soulbound.powers.water.title": "Water",
+
+  "soulbound.powers.water.description1": "The depths are your home! Breathe and mine underwater with ease, protected by the power of the conduit.",
+  "soulbound.powers.water.description2": "",
+  "soulbound.powers.water.description3": "",
+
+  "soulbound.buffs.water.dolphins_grace": "Dolphin's Grace",
+  "soulbound.buffs.water.resistance": "Resistance",
+  "soulbound.buffs.water.projectile_immunity": "Projectile Immunity",
+
+  "soulbound.debuffs.water.drowning": "Drowning III",
+  "soulbound.debuffs.water.projectile_attraction": "Projectile Attraction I",
+
+  "soulbound.abilities.water.title": "Drown",
+  "soulbound.abilities.water.description": "Surround the head of a targeted player with water, drowning them for 25 seconds. Range: 15 blocks. Cooldown: 5 minutes.",
+
+
+  "soulbound.powers.necromancy.title": "Necromancy",
+
+  "soulbound.powers.necromancy.description1": "Death is only the beginning! Raise fallen mobs you've slain as loyal undead companions using their remains.",
+  "soulbound.powers.necromancy.description2": "",
+  "soulbound.powers.necromancy.description3": "",
+
+  "soulbound.buffs.necromancy.mob_aggression": "Reduced Mob Aggression",
+  "soulbound.buffs.necromancy.mob_drops": "Plentiful Drops",
+
+  "soulbound.debuffs.necromancy.infested": "Infested II",
+  "soulbound.debuffs.necromancy.darkness": "Darkness III",
+
+  "soulbound.abilities.necromancy.title": "Raise Dead",
+  "soulbound.abilities.necromancy.description": "Use a fresh mob drop from a mob you personally killed to resurrect it as a loyal companion. Drops expire after 30 minutes.",
+
+
+  "soulbound.powers.invisibility.title": "Invisibility",
+
+  "soulbound.powers.invisibility.description1": "Become completely unseen! Even your armor, tools, and presence in death messages vanish with you.",
+  "soulbound.powers.invisibility.description2": "",
+  "soulbound.powers.invisibility.description3": "",
+
+  "soulbound.buffs.invisibility.night_vision": "Night Vision",
+
+  "soulbound.debuffs.invisibility.glowing": "Glowing III",
+  "soulbound.debuffs.invisibility.bad_omen": "Bad Omen II",
+  "soulbound.debuffs.invisibility.darkness": "Darkness I",
+
+  "soulbound.abilities.invisibility.title": "Vanish",
+  "soulbound.abilities.invisibility.description": "Become completely invisible for 3 minutes. Cooldown: 30 minutes.",
+
+
+  "soulbound.powers.swap.title": "Swap",
+
+  "soulbound.powers.swap.description1": "Mark another player as your target and, when the time is right, trade places with them from afar.",
+  "soulbound.powers.swap.description2": "",
+  "soulbound.powers.swap.description3": "",
+
+  "soulbound.buffs.swap.saturation": "Saturation",
+  "soulbound.buffs.swap.haste": "Haste",
+
+  "soulbound.debuffs.swap.nausea": "Nausea III",
+  "soulbound.debuffs.swap.mining_fatigue": "Mining Fatigue II–III",
+
+  "soulbound.abilities.swap.title": "Swap",
+  "soulbound.abilities.swap.description": "Swap places with your marked target. The mark lasts for 15 minutes and is shown by spore blossom particles."
 }
