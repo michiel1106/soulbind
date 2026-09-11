@@ -1,8 +1,11 @@
 package bikerdbmid.soulbound.components.IComponents;
 
+import bikerdbmid.soulbound.components.content.buffs.custom.*;
+import bikerdbmid.soulbound.components.content.debuffs.custom.*;
 import net.minecraft.nbt.*;
 import org.jspecify.annotations.*;
 import org.ladysnake.cca.api.v3.component.*;
+import org.spongepowered.asm.mixin.*;
 
 import java.util.*;
 
@@ -16,6 +19,9 @@ public interface ISoulDataComponent extends Component {
     void setPower(@Nullable String id);
     boolean activatePower();
     void setEffect(@Nullable String id);
+    boolean isDebuffActive(DeBuff deBuff);
+    boolean isBuffActive(Buff buff);
+
 
     class SoulData {
         @Nullable public UUID uuid;

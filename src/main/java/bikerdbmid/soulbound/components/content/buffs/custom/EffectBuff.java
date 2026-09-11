@@ -7,15 +7,13 @@ import net.minecraft.world.effect.*;
 import net.minecraft.world.entity.player.*;
 
 public class EffectBuff extends Buff{
-    EDistType type;
     String id;
     Holder<MobEffect> effect;
     int duration;
     int amplifier;
 
-    public EffectBuff(EDistType distType, String id, Holder<MobEffect> jumpBoost, int duration, int amplifier) {
-        super(distType, id);
-        this.type = distType;
+    public EffectBuff(String id, Holder<MobEffect> jumpBoost, int duration, int amplifier) {
+        super(id);
         this.id = id;
         this.effect = jumpBoost;
         this.duration = duration;

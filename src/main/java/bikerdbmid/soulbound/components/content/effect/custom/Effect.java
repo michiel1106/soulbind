@@ -12,10 +12,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.*;
 
 public class Effect {
     private @Nullable Block block;
-    private @Nullable Item item;
+    private Supplier<ItemStack> itemSupplier = () -> ItemStack.EMPTY;
     private @Nullable Identifier image;
     public ImgRenderType imgRenderType;
     public final String id;
@@ -33,7 +34,8 @@ public class Effect {
 
     public Effect withBlock(Block block) {this.block = block; this.imgRenderType = ImgRenderType.BLOCK; return this;}
     public Effect withIdentifier(Identifier identifier) {this.image = identifier; this.imgRenderType = ImgRenderType.IMAGE; return this;}
-    public Effect withItem(Item item) {this.item = item; this.imgRenderType = ImgRenderType.ITEM; return this;}
+    public Effect withItem(Supplier<ItemStack> supplier) {this.itemSupplier = supplier; this.imgRenderType = ImgRenderType.ITEM; return this;}
+
 
     public @Nullable Identifier getImage() {
         return image;
@@ -43,8 +45,8 @@ public class Effect {
         return block;
     }
 
-    public @Nullable Item getItem() {
-        return item;
+    public ItemStack getItem() {
+        return itemSupplier.get();
     }
 
     public ImgRenderType getImgRenderType() {

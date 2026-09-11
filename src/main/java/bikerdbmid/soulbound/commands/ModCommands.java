@@ -65,6 +65,7 @@ public class ModCommands {
                         ISoulDataComponent dataComponent = ModComponents.SOULDATA.get(player);
 
                         dataComponent.setEffect("empty");
+                        dataComponent.getValue().setUuid(null);
 
                         ctx.getSource().sendSuccess(() -> Component.literal("Successfully cleared effect!"), false);
 

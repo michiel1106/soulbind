@@ -4,12 +4,10 @@ import bikerdbmid.soulbound.api.content.*;
 import net.minecraft.nbt.*;
 import net.minecraft.world.entity.player.*;
 
-public abstract class Buff {
+public class Buff {
     public final String id;
-    public final EDistType distType;
 
-    protected Buff(EDistType distType, String id) {
-        this.distType = distType;
+    public Buff(String id) {
         this.id = id;
     }
 

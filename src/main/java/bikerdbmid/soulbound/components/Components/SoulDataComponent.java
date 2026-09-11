@@ -15,8 +15,8 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.*;
+import net.minecraft.util.parsing.packrat.*;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.*;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import org.jspecify.annotations.Nullable;
@@ -24,6 +24,7 @@ import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 import org.ladysnake.cca.api.v3.component.tick.CommonTickingComponent;
 
 import java.util.*;
+import java.util.concurrent.atomic.*;
 
 public class SoulDataComponent implements ISoulDataComponent, AutoSyncedComponent, CommonTickingComponent {
     private final SoulData soulData = new SoulData();
@@ -117,6 +118,82 @@ public class SoulDataComponent implements ISoulDataComponent, AutoSyncedComponen
     }
 
     @Override
+    public boolean isBuffActive(Buff buff) {
+        Map<String, CompoundTag> buffs = getValue().buffs;
+
+        Optional<EDistType> activeDebuffLevel = getActiveDebuffLevel(player);
+        boolean buffsAndPowerAllowed = activeDebuffLevel.isEmpty();
+
+        AtomicBoolean isBuffActive = new AtomicBoolean(false);
+
+        buffs.forEach((s, tag) -> {
+            Buff tempBuff = ModBuffs.getBuff(s);
+            if (tempBuff == buff) {
+                if (buffsAndPowerAllowed) {
+                    isBuffActive.set(true);
+                }
+            }
+
+        });
+
+
+        return isBuffActive.get();
+    }
+
+    @Override
+    public boolean isDebuffActive(DeBuff deBuff) {
+        Map<String, CompoundTag> debuffs = getValue().debuffs;
+
+        AtomicBoolean atomicBoolean = new AtomicBoolean(false);
+
+        Optional<EDistType> activeDebuffLevel = getActiveDebuffLevel(player);
+
+        debuffs.forEach(((s, compoundTag) -> {
+            DeBuff tempDebuffs = ModDebuffs.getDeBuff(s);
+
+            if (tempDebuffs == deBuff) {
+                if (activeDebuffLevel.isPresent() && deBuff.distType == activeDebuffLevel.get()) {
+                    atomicBoolean.set(true);
+                }
+            }
+
+
+        }));
+
+
+
+        return atomicBoolean.get();
+    }
+
+    @Override
+    public void tick() {
+        if (player.level().isClientSide()) return; // gameplay logic is server-authoritative
+
+        Optional<EDistType> activeDebuffLevel = getActiveDebuffLevel(player);
+        boolean buffsAndPowerAllowed = activeDebuffLevel.isEmpty();
+
+        for (Map.Entry<String, CompoundTag> e : soulData.buffs.entrySet()) {
+            if (!buffsAndPowerAllowed) continue; // any active debuff bracket suppresses all buffs
+            Buff buff = ModBuffs.getBuff(e.getKey());
+            if (buff != null) buff.tick(player, e.getValue());
+        }
+
+        for (Map.Entry<String, CompoundTag> e : soulData.debuffs.entrySet()) {
+            DeBuff debuff = ModDebuffs.getDeBuff(e.getKey());
+            if (debuff == null) continue;
+            if (activeDebuffLevel.isPresent() && debuff.distType == activeDebuffLevel.get()) {
+                debuff.tick(player, e.getValue());
+            }
+        }
+
+        if (soulData.power != null) {
+            Power power = ModPowers.getPower(soulData.power);
+            // cooldowns etc. still decay regardless of gating - only *activation* is blocked, see activatePower()
+            if (power != null) power.tick(player, soulData.powerData);
+        }
+    }
+
+    @Override
     public void readData(ValueInput valueInput) {
         valueInput.read("uuid", UUIDUtil.CODEC).ifPresent(soulData::setUuid);
         valueInput.read("buffs", Codec.unboundedMap(Codec.STRING, CompoundTag.CODEC))
@@ -148,37 +225,9 @@ public class SoulDataComponent implements ISoulDataComponent, AutoSyncedComponen
     }
 
     @Override
-    public void tick() {
-        if (player.level().isClientSide()) return; // gameplay logic is server-authoritative
-
-        Optional<EDistType> activeDebuffLevel = getActiveDebuffLevel();
-        boolean buffsAndPowerAllowed = activeDebuffLevel.isEmpty();
-
-        for (Map.Entry<String, CompoundTag> e : soulData.buffs.entrySet()) {
-            if (!buffsAndPowerAllowed) continue; // any active debuff bracket suppresses all buffs
-            Buff buff = ModBuffs.getBuff(e.getKey());
-            if (buff != null) buff.tick(player, e.getValue());
-        }
-
-        for (Map.Entry<String, CompoundTag> e : soulData.debuffs.entrySet()) {
-            DeBuff debuff = ModDebuffs.getDeBuff(e.getKey());
-            if (debuff == null) continue;
-            if (activeDebuffLevel.isPresent() && debuff.distType == activeDebuffLevel.get()) {
-                debuff.tick(player, e.getValue());
-            }
-        }
-
-        if (soulData.power != null) {
-            Power power = ModPowers.getPower(soulData.power);
-            // cooldowns etc. still decay regardless of gating - only *activation* is blocked, see activatePower()
-            if (power != null) power.tick(player, soulData.powerData);
-        }
-    }
-
-    @Override
     public boolean activatePower() {
         if (soulData.power == null) return false;
-        if (getActiveDebuffLevel().isPresent()) return false; // too far from soulmate to use power
+        if (getActiveDebuffLevel(player).isPresent()) return false; // too far from soulmate to use power
 
         Power power = ModPowers.getPower(soulData.power);
         if (power == null) return false;
@@ -188,12 +237,10 @@ public class SoulDataComponent implements ISoulDataComponent, AutoSyncedComponen
         return used;
     }
 
-    /**
-     * Empty = no partner set, OR partner close enough that no debuff bracket applies.
-     * Present = the debuff severity that should currently be active (buffs/power suppressed).
-     */
-    private Optional<EDistType> getActiveDebuffLevel() {
-        UUID uuid = soulData.uuid;
+    public static Optional<EDistType> getActiveDebuffLevel(Player player) {
+        ISoulDataComponent dataComponent = ModComponents.SOULDATA.get(player);
+
+        UUID uuid = dataComponent.getValue().uuid;
         if (uuid == null) return Optional.empty(); // no partner - mechanic doesn't apply
 
         if (!(player.level() instanceof ServerLevel serverLevel)) return Optional.empty();
@@ -213,4 +260,6 @@ public class SoulDataComponent implements ISoulDataComponent, AutoSyncedComponen
 
         return Optional.of(EDistType.HIGH); // online, different dimension - definitely far
     }
+
+
 }

@@ -144,15 +144,15 @@ public class RollingEffectWidget extends AbstractWidget {
 
     }
 
-    private void renderItem(GuiGraphicsExtractor graphics, int x, int y, int itemSize, @Nullable Item item) {
-        if (item == null) return;
+    private void renderItem(GuiGraphicsExtractor graphics, int x, int y, int itemSize, @Nullable ItemStack stack) {
+        if (stack == null) return;
 
         float scale = itemSize / 16f;
 
         graphics.pose().pushMatrix();
         graphics.pose().translate(x, y);
         graphics.pose().scale(scale, scale);
-        graphics.item(item.getDefaultInstance(), 0, 0);
+        graphics.item(stack, 0, 0);
         graphics.pose().popMatrix();
     }
 

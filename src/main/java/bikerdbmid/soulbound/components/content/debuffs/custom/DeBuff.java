@@ -4,11 +4,11 @@ import bikerdbmid.soulbound.api.content.*;
 import net.minecraft.nbt.*;
 import net.minecraft.world.entity.player.*;
 
-public abstract class DeBuff {
+public class DeBuff {
     public final String id;
     public final EDistType distType;
 
-    protected DeBuff(EDistType distType, String id) {
+    public DeBuff(EDistType distType, String id) {
         this.distType = distType;
         this.id = id;
     }
