@@ -8,8 +8,8 @@ public abstract class Power {
     public final String id;
     public final EDistType distType;
 
-    protected Power(EDistType distType, String id) {
-        this.distType = distType;
+    public Power(String id) {
+        this.distType = EDistType.LOW;
         this.id = id;
     }
 

@@ -33,6 +33,8 @@ public class ModDebuffs {
 
     public static DeBuff DROWNING_IN_AIR = register(new DeBuff(EDistType.MEDIUM, "drowning_in_air"));
 
+    public static DeBuff REGEN_ON_SWORD_HIT = register(new DeBuff(EDistType.MEDIUM, "regen_on_sword_hit"));
+
 
 
 

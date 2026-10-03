@@ -5,6 +5,7 @@
   "mixins": [
     "ExampleMixin",
     "debuff.LivingEntityMixin",
+    "debuff.PlayerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

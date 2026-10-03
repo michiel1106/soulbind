@@ -22,6 +22,15 @@ public class SoulBoundClient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
+		ClientPlayNetworking.registerGlobalReceiver(CooldownAmountPayload.TYPE,
+				(payload, context) -> ClientCooldownState.set(payload.remaining(), payload.total()));
+
+		CooldownBarHud.register();
+		ClientTickEvents.END_CLIENT_TICK.register(client -> {
+			if (!client.isPaused()) ClientCooldownState.tick();
+		});
+
+
 		KeyMappingRegistryImpl.registerKeyMapping(usePowerKey);
 		KeyMappingRegistryImpl.registerKeyMapping(testKey);
 
@@ -33,8 +42,6 @@ public class SoulBoundClient implements ClientModInitializer {
 				Minecraft.getInstance().setScreenAndShow(new EffectSelectionScreen());
 			}
 		});
-
-
 
 	}
 }

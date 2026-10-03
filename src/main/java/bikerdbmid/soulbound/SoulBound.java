@@ -4,6 +4,7 @@ import bikerdbmid.soulbound.commands.*;
 import bikerdbmid.soulbound.commands.debug.*;
 import bikerdbmid.soulbound.components.*;
 import bikerdbmid.soulbound.components.content.*;
+import bikerdbmid.soulbound.components.content.event.*;
 import bikerdbmid.soulbound.networking.*;
 import net.fabricmc.api.ModInitializer;
 
@@ -27,6 +28,7 @@ public class SoulBound implements ModInitializer {
 		ModCommands.init();
 		DebugCommands.init();
 		ModContentInit.init();
+		ModEventHandler.init();
 	}
 
 	public static Identifier id(String path) {

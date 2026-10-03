@@ -8,6 +8,7 @@ public class ModNetworking {
 
     public static void init() {
         PayloadTypeRegistry.serverboundPlay().register(ActivatePowerPayload.TYPE, ActivatePowerPayload.STREAM_CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(CooldownAmountPayload.TYPE, CooldownAmountPayload.STREAM_CODEC);
 
         ServerPlayNetworking.registerGlobalReceiver(ActivatePowerPayload.TYPE, (payload, context) -> {
             ServerPlayer player = context.player();

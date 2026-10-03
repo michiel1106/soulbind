@@ -5,8 +5,8 @@ import java.util.*;
 public enum EDistType {
     // High is worse
 
-    LOW(10, 20, 1),
-    MEDIUM(20, 30, 2),
+    LOW(10, 30, 1),
+    MEDIUM(30, 40, 2),
     HIGH(40, 50, 3)
     ;
 

@@ -24,6 +24,12 @@ public class ModEffects {
             new Effect("feather")
                     .withItem(Items.FEATHER::getDefaultInstance)
                     .withBuff(ModBuffs.JUMP_BOOST_2)
+                    .withBuff(ModBuffs.SWIFTNESS_2)
+                    .withDebuff(ModDebuffs.SLOW_FALLING_1)
+                    .withDebuff(ModDebuffs.SLOWNESS_LOW_1)
+                    .withDebuff(ModDebuffs.SLOWNESS_MEDIUM_2)
+                    .withDebuff(ModDebuffs.SLOWNESS_HIGH_3)
+                    .withPower(ModPowers.DASH)
     );
 
     public static Effect POISON = register(

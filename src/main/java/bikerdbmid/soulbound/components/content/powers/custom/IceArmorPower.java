@@ -10,7 +10,7 @@ public class IceArmorPower extends Power {
     private final int interval;
 
     public IceArmorPower(EDistType distType, String id, int interval) {
-        super(distType, id);
+        super(id);
         this.interval = interval;
     }
 

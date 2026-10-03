@@ -11,6 +11,7 @@ public class ModPowers {
     private static final Map<String, Power> powerMap = new HashMap<>();
 
     public static Power ICE_ARMOR = register(new IceArmorPower(EDistType.HIGH, "ice_armor", 40));
+    public static Power DASH = register(new DashPower("dash", 2400));
 
     public static void init() {}
 
