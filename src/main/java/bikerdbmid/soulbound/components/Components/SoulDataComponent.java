@@ -11,6 +11,8 @@ import bikerdbmid.soulbound.components.content.effect.*;
 import bikerdbmid.soulbound.components.content.effect.custom.*;
 import bikerdbmid.soulbound.components.content.powers.ModPowers;
 import bikerdbmid.soulbound.components.content.powers.custom.Power;
+import bikerdbmid.soulbound.components.content.tickeffects.*;
+import bikerdbmid.soulbound.components.content.tickeffects.custom.*;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.CompoundTag;
@@ -98,6 +100,23 @@ public class SoulDataComponent implements ISoulDataComponent, AutoSyncedComponen
     }
 
     @Override
+    public void setTickEffect(@Nullable String id) {
+        if (soulData.tickEffect != null) {
+            TickEffect old = ModTickEffects.getTickEffect(soulData.tickEffect);
+            if (old != null) old.onRemove(player, soulData.tickEffectData);
+        }
+
+        soulData.tickEffectData = new CompoundTag();
+        soulData.tickEffect = id;
+
+        if (id != null) {
+            TickEffect fresh = ModTickEffects.getTickEffect(id);
+            if (fresh != null) fresh.onApply(player, soulData.tickEffectData);
+        }
+        sync();
+    }
+
+    @Override
     public void setEffect(@Nullable String id) {
         if (soulData.effect != null) {
             Effect old = ModEffects.getEffect(soulData.effect);
@@ -160,9 +179,12 @@ public class SoulDataComponent implements ISoulDataComponent, AutoSyncedComponen
 
         }));
 
-
-
         return atomicBoolean.get();
+    }
+
+    @Override
+    public Effect getEffect() {
+        return ModEffects.getEffect(soulData.effect);
     }
 
     @Override
@@ -191,6 +213,12 @@ public class SoulDataComponent implements ISoulDataComponent, AutoSyncedComponen
             // cooldowns etc. still decay regardless of gating - only *activation* is blocked, see activatePower()
             if (power != null) power.tick(player, soulData.powerData);
         }
+
+        if (soulData.tickEffect != null) {
+            TickEffect effect = ModTickEffects.getTickEffect(soulData.tickEffect);
+
+            if (effect != null) effect.tick(player, soulData.tickEffectData);
+        }
     }
 
     @Override
@@ -204,6 +232,9 @@ public class SoulDataComponent implements ISoulDataComponent, AutoSyncedComponen
         // absence now explicitly means "no power" - don't just skip
         soulData.power = valueInput.read("power", Codec.STRING).orElse(null);
         soulData.powerData = valueInput.read("powerData", CompoundTag.CODEC).orElse(new CompoundTag());
+
+        soulData.tickEffect = valueInput.read("tickEffect", Codec.STRING).orElse(null);
+        soulData.tickEffectData = valueInput.read("tickEffectData", CompoundTag.CODEC).orElse(new CompoundTag());
 
         soulData.effect = valueInput.read("effect", Codec.STRING).orElse(null);
     }
@@ -219,6 +250,12 @@ public class SoulDataComponent implements ISoulDataComponent, AutoSyncedComponen
             valueOutput.store("power", Codec.STRING, soulData.power);
         }
         valueOutput.store("powerData", CompoundTag.CODEC, soulData.powerData);
+
+        if (soulData.tickEffect != null) {
+            valueOutput.store("tickEffect", Codec.STRING, soulData.tickEffect);
+        }
+        valueOutput.store("powerData", CompoundTag.CODEC, soulData.tickEffectData);
+
         if (soulData.effect != null) {
             valueOutput.store("effect", Codec.STRING, soulData.effect);
         }

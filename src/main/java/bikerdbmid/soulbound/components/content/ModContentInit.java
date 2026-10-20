@@ -4,6 +4,7 @@ import bikerdbmid.soulbound.components.content.buffs.*;
 import bikerdbmid.soulbound.components.content.debuffs.*;
 import bikerdbmid.soulbound.components.content.effect.*;
 import bikerdbmid.soulbound.components.content.powers.*;
+import bikerdbmid.soulbound.components.content.tickeffects.*;
 
 public class ModContentInit {
 
@@ -12,6 +13,7 @@ public class ModContentInit {
         ModDebuffs.init();
         ModEffects.init();
         ModPowers.init();
+        ModTickEffects.init();
 
     }
 

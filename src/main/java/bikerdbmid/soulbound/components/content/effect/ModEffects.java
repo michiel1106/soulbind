@@ -35,6 +35,7 @@ public class ModEffects {
     public static Effect POISON = register(
             new Effect("poison")
                     .withIdentifier(Identifier.fromNamespaceAndPath("minecraft", "textures/mob_effect/poison"))
+
     );
 
     public static Effect FROZEN = register(

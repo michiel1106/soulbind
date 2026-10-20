@@ -5,6 +5,7 @@ import bikerdbmid.soulbound.components.IComponents.ISoulDataComponent;
 import bikerdbmid.soulbound.components.content.buffs.custom.Buff;
 import bikerdbmid.soulbound.components.content.debuffs.custom.DeBuff;
 import bikerdbmid.soulbound.components.content.powers.custom.Power;
+import bikerdbmid.soulbound.components.content.tickeffects.custom.*;
 import net.minecraft.resources.*;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.*;
@@ -22,6 +23,7 @@ public class Effect {
     public final String id;
     private final List<Buff> buffs = new ArrayList<>();
     private final List<DeBuff> debuffs = new ArrayList<>();
+    @Nullable private TickEffect tickEffect;
     @Nullable private Power power;
 
     public Effect(String id) {
@@ -31,6 +33,7 @@ public class Effect {
     public Effect withBuff(Buff buff) { buffs.add(buff); return this; }
     public Effect withDebuff(DeBuff debuff) { debuffs.add(debuff); return this; }
     public Effect withPower(Power power) { this.power = power; return this; }
+    public Effect withTickEffect(TickEffect tickEffect) {this.tickEffect = tickEffect; return this;}
 
     public Effect withBlock(Block block) {this.block = block; this.imgRenderType = ImgRenderType.BLOCK; return this;}
     public Effect withIdentifier(Identifier identifier) {this.image = identifier; this.imgRenderType = ImgRenderType.IMAGE; return this;}
@@ -65,6 +68,7 @@ public class Effect {
         for (Buff b : buffs) component.addBuff(b.id);
         for (DeBuff d : debuffs) component.addDebuff(d.id);
         if (power != null) component.setPower(power.id);
+        if (tickEffect != null) component.setTickEffect(tickEffect.id);
     }
 
     public void remove(ISoulDataComponent component) {
@@ -72,6 +76,9 @@ public class Effect {
         for (DeBuff d : debuffs) component.removeDebuff(d.id);
         if (power != null && power.id.equals(component.getValue().power)) {
             component.setPower(null);
+        }
+        if (tickEffect != null && tickEffect.id.equals(component.getValue().tickEffect)) {
+            component.setTickEffect(null);
         }
     }
 }
