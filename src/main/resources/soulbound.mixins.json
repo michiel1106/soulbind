@@ -4,8 +4,7 @@
   "compatibilityLevel": "JAVA_25",
   "mixins": [
     "ExampleMixin",
-    "debuff.LivingEntityMixin",
-    "debuff.PlayerMixin"
+    "debuff.LivingEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

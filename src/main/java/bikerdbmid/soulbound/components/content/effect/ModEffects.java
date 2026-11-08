@@ -35,6 +35,11 @@ public class ModEffects {
     public static Effect POISON = register(
             new Effect("poison")
                     .withIdentifier(Identifier.fromNamespaceAndPath("minecraft", "textures/mob_effect/poison"))
+                    .withBuff(ModBuffs.REGENERATION_1)
+
+                    .withDebuff(ModDebuffs.REGEN_ON_SWORD_HIT_MEDIUM)
+                    .withDebuff(ModDebuffs.REGEN_ON_SWORD_HIT_HIGH)
+                    .withDebuff(ModDebuffs.POISON_1)
 
     );
 
