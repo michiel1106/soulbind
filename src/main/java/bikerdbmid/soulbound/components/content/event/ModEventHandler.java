@@ -37,6 +37,10 @@ public class ModEventHandler {
             }
         }
 
+        if (victim instanceof ServerPlayer serverPlayer) {
+
+        }
+
     }
 
     private static boolean allowDamage(LivingEntity entity, DamageSource damageSource, float v) {

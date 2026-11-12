@@ -1,6 +1,5 @@
 package bikerdbmid.soulbound.components.content.buffs;
 
-import bikerdbmid.soulbound.api.content.*;
 import bikerdbmid.soulbound.components.content.buffs.custom.*;
 import net.minecraft.world.effect.*;
 import org.jspecify.annotations.*;
@@ -16,11 +15,12 @@ public class ModBuffs {
     public static Buff JUMP_BOOST_2 = register(new EffectBuff("jump_boost_2", MobEffects.JUMP_BOOST, 20, 1));
     public static Buff REGENERATION_1 = register(new EffectBuff("regeneration_1", MobEffects.REGENERATION, 20, 0));
     public static Buff RESISTANCE_1 = register(new EffectBuff("resistance_1", MobEffects.RESISTANCE, 20, 0));
-    public static Buff NIGHT_VISION_1 = register(new EffectBuff("night_vision_1", MobEffects.NIGHT_VISION, 20, 0));
+    public static Buff NIGHT_VISION_1 = register(new EffectBuff("night_vision_1", MobEffects.NIGHT_VISION, 200, 0));
     public static Buff SATURATION_1 = register(new EffectBuff("saturation_1", MobEffects.SATURATION, 20, 0));
     public static Buff FIRE_RESISTANCE_1 = register(new EffectBuff("fire_resistance_1", MobEffects.FIRE_RESISTANCE, 20, 0));
     public static Buff DOLPHINS_GRACE_1 = register(new EffectBuff("dolphins_grace_1", MobEffects.DOLPHINS_GRACE, 20, 0));
     public static Buff HASTE_1 = register(new EffectBuff("haste_1", MobEffects.HASTE, 20, 0));
+    public static Buff ABSORPTION_2_HEARTS = register(new Absorption_Two_Hearts("absorption_2_hearts"));
 
     public static Buff PLENTIFUL_CROPS = register(new Buff("plentiful_crops"));
     public static Buff CLEAR_WEATHER_3x3_CHUNKS = register(new Buff("clear_weather_3x3_chunks"));

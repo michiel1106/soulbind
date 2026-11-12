@@ -12,6 +12,7 @@ public class ModPowers {
 
     public static Power ICE_ARMOR = register(new IceArmorPower(EDistType.HIGH, "ice_armor", 40));
     public static Power DASH = register(new DashPower("dash", 2400));
+    public static Power FROSTWALKER = register(new FrostWalkerPower("frostwalker"));
 
     public static void init() {}
 

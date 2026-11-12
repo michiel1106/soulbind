@@ -23,7 +23,6 @@ public class EffectBuff extends Buff{
     @Override
     public void tick(Player player, CompoundTag data) {
         super.tick(player, data);
-        player.addEffect(new MobEffectInstance(effect, duration, amplifier, false, true));
-
+        player.addEffect(new MobEffectInstance(effect, duration, amplifier, true, false, true));
     }
 }

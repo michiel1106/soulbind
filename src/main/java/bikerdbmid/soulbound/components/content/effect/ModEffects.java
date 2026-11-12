@@ -23,19 +23,24 @@ public class ModEffects {
     public static Effect FEATHER = register(
             new Effect("feather")
                     .withItem(Items.FEATHER::getDefaultInstance)
+
                     .withBuff(ModBuffs.JUMP_BOOST_2)
                     .withBuff(ModBuffs.SWIFTNESS_2)
+
                     .withDebuff(ModDebuffs.SLOW_FALLING_1)
                     .withDebuff(ModDebuffs.SLOWNESS_LOW_1)
                     .withDebuff(ModDebuffs.SLOWNESS_MEDIUM_2)
                     .withDebuff(ModDebuffs.SLOWNESS_HIGH_3)
+
                     .withPower(ModPowers.DASH)
     );
 
     public static Effect POISON = register(
             new Effect("poison")
                     .withIdentifier(Identifier.fromNamespaceAndPath("minecraft", "textures/mob_effect/poison"))
+
                     .withBuff(ModBuffs.REGENERATION_1)
+                    .withBuff(ModBuffs.ABSORPTION_2_HEARTS)
 
                     .withDebuff(ModDebuffs.REGEN_ON_SWORD_HIT_MEDIUM)
                     .withDebuff(ModDebuffs.REGEN_ON_SWORD_HIT_HIGH)
@@ -46,6 +51,19 @@ public class ModEffects {
     public static Effect FROZEN = register(
             new Effect("frozen")
                     .withIdentifier(SoulBound.id("textures/effect/icon/frozen"))
+
+                    .withBuff(ModBuffs.RESISTANCE_1)
+                    .withBuff(ModBuffs.NIGHT_VISION_1)
+
+                    .withDebuff(ModDebuffs.SLOWNESS_LOW_2)
+                    .withDebuff(ModDebuffs.SLOWNESS_MEDIUM_3)
+                    .withDebuff(ModDebuffs.SLOWNESS_HIGH_4)
+
+                    .withDebuff(ModDebuffs.FREEZING)
+
+                    .withPower(ModPowers.FROSTWALKER)
+
+
     );
 
     public static Effect GROWTH = register(
